@@ -1,2 +1,0 @@
-# Module hash
-# RPC service class, partial path of RPC policy file

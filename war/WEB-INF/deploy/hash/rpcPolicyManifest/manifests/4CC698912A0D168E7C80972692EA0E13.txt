@@ -1,2 +1,0 @@
-serviceClass: nz.net.thoms.hash.client.GreetingService
-path: 9C9A4DC1FB927E5789BE1CCFD7FAD848.gwt.rpc

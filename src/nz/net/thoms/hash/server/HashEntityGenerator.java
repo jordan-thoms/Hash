@@ -1,5 +1,7 @@
 package nz.net.thoms.hash.server;
 
+import java.util.ArrayList;
+
 import nz.net.thoms.hash.shared.Util;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -8,14 +10,24 @@ import com.google.appengine.api.datastore.Entity;
 
 public class HashEntityGenerator {
 	private static int APPROX_JOB_SIZE = 1000000;
-	private static int CHARSET_SIZE = 100;
+	private static int CHARSET_SIZE = Util.chars.length;
 	private static int POSTFIX_LENGTH = (int) (Math.log(APPROX_JOB_SIZE) / Math.log(CHARSET_SIZE));
+	
+	
 	
 	public static void generatePutEntities(String hash, int width) {
 		int prefix_length = width - POSTFIX_LENGTH;
+		if  (prefix_length < 0) {
+			prefix_length = 0;
+		}
 		
-		if (prefix_length > 0) {
-			
+		ArrayList<String> prefixes = Util.permute(Util.chars, prefix_length);
+		if (!prefixes.isEmpty()) {
+			for (String prefix: prefixes) {
+				Util.putEntity(hash, prefix, width);
+			}
+		} else {
+			Util.putEntity(hash, "", width);
 		}
 	}
 }

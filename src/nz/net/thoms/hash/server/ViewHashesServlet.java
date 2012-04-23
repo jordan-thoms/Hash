@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import nz.net.thoms.hash.shared.Util;
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -29,6 +31,9 @@ public class ViewHashesServlet extends HttpServlet {
 				.getDatastoreService();
 
 		displayComments(out, datastore);
+		
+		
+		HashEntityGenerator.generatePutEntities("82840f2eb96afa447a2f2df240014c25", 5);		
 	}
 
 	private void displayComments(PrintWriter out, DatastoreService datastore) {

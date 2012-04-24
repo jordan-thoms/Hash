@@ -17,7 +17,7 @@
       Used to prevent large amounts of quota being used up in a short time period. -->
       <name>mapreduce.mapper.inputprocessingrate</name>
       <!-- By default it is 1000 -->
-      <value>8000</value>
+      <value>9999999</value>
 </property>
   </configuration>
 </configurations>

@@ -1,5 +1,6 @@
 package nz.net.thoms.hash.mapreduce;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
@@ -16,6 +17,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.tools.mapreduce.AppEngineMapper;
+import com.twmacinta.util.MD5;
 
 public class HashMapper extends AppEngineMapper<Key, Entity, NullWritable, NullWritable> {
 	private static final Logger log = Logger.getLogger(HashMapper.class.getName());
@@ -23,6 +25,7 @@ public class HashMapper extends AppEngineMapper<Key, Entity, NullWritable, NullW
 	private MessageDigest hasher;
 	
 	public HashMapper() {
+		MD5.initNativeLibrary(true);
 	}
 
 	@Override
@@ -54,7 +57,17 @@ public class HashMapper extends AppEngineMapper<Key, Entity, NullWritable, NullW
 			for (String postfix : Util.permute(Util.chars, (int) length - prefix.length())) {
 				String candidate = prefix.concat(postfix);
 //				log.warning(candidate + " with prefix: " + prefix);
-				String hashC = DigestUtils.md5Hex(candidate);
+				//String hashC = DigestUtils.md5Hex(candidate);
+
+				MD5 md5 = new MD5();
+				try {
+					md5.Update(candidate, null);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				String hashC = md5.asHex();
+				
 				if (hash.equals(hashC)) {
 					log.warning("Password is " + candidate);
 					DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();							

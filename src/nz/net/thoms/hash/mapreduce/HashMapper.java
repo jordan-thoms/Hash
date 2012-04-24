@@ -50,7 +50,7 @@ public class HashMapper extends AppEngineMapper<Key, Entity, NullWritable, NullW
 			String prefix = (String) value.getProperty("prefix");
 			long length = (Long) value.getProperty("length");
 			log.warning("Mapping key: " + key + " hash: " + hash + " prefix: " + prefix + " length: " + length);
-			
+			int counter = 0;
 			for (String postfix : Util.permute(Util.chars, (int) length - prefix.length())) {
 				String candidate = prefix.concat(postfix);
 //				log.warning(candidate + " with prefix: " + prefix);
@@ -63,7 +63,10 @@ public class HashMapper extends AppEngineMapper<Key, Entity, NullWritable, NullW
 					entry.setProperty("password", candidate);
 					datastore.put(entry);
 				}
+				counter++;
 			}
+			
+	        context.getCounter("Hashes", "Checked").increment(counter);
 		}
 	}
 }

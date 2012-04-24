@@ -12,5 +12,12 @@
       <name human="Entity Kind to Map Over">mapreduce.mapper.inputformat.datastoreinputformat.entitykind</name>
       <value template="optional">PBFVotes</value>
     </property>
+    <property>
+      <!-- The aggregate number of entities processed per second by all mappers. 
+      Used to prevent large amounts of quota being used up in a short time period. -->
+      <name>mapreduce.mapper.inputprocessingrate</name>
+      <!-- By default it is 1000 -->
+      <value>8000</value>
+</property>
   </configuration>
 </configurations>

@@ -9,9 +9,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 
 public class HashEntityGenerator {
-	private static int APPROX_JOB_SIZE = 1000000;
-	private static int CHARSET_SIZE = Util.chars.length;
-	private static int POSTFIX_LENGTH = (int) (Math.log(APPROX_JOB_SIZE) / Math.log(CHARSET_SIZE));
+	private static int POSTFIX_LENGTH = 4;
 	
 	
 	

@@ -46,7 +46,7 @@ public class ViewHashesServlet extends HttpServlet {
 			throws IOException {
 		resp.setContentType("text/html");
 		PrintWriter out = resp.getWriter();
-		out.println("<html><head><meta http-equiv=\"refresh\" content=\"5\"></head><body>");
+		out.println("<html><head><meta http-equiv=\"refresh\" content=\"15\"></head><body>");
 		out.println("<h1>Hashes</h1>");
 		try {
 			URI uri = new URI(req.getRequestURL().toString());

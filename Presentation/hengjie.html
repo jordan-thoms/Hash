@@ -6,6 +6,7 @@
     <title>HTML5 Presentation</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="./images/md5-hash.js"></script>
+    <script type="text/javascript" src="http://www.thimbleopensource.com/download/jquery/jquery.filter_input.js"></script>
     <link href="./HTML5 Presentation_files/css" rel="stylesheet" type="text/css">
     <link id="prettify-link" href="http://slides.html5rocks.com/src/prettify/prettify.css" rel="stylesheet" disabled="">
     <link href="http://slides.html5rocks.com/css/moon.css" class="theme" rel="stylesheet" media="screen">
@@ -129,21 +130,39 @@
             }
           </style>
           <section class="">
-            <p>Please enter your plain text password</p>
+            <p>Please enter or say your plain text password</p>
             <input type="text" maxlength="10" size="20" x-webkit-speech onwebkitspeechchange="handleSpeech()" id="plain_text_password">
             <p>MD5 hash of your password</p>
             <span id="md5-hash" class="html"></span>
             <script type="text/javascript">
               $('#plain_text_password').filter_input({regex:'[a-z]'}); 
 
-              function handleSearchChange() 
+              function handleSpeech() 
               {
-                
+                // This removes the spaces in the input that we get from Chrome
+                var new_string = "";
+                for ( i=0; i < $("#plain_text_password").val().length; i++ )
+                {
+                  if ( $("#plain_text_password").val()[i] != " " )
+                  {
+                    // Only add characters to new string if it isn't a space
+                    new_string = new_string + $("#plain_text_password").val()[i]
+                  }
+                }
+
+                if ( new_string != "" )
+                {
+                  $("#plain_text_password").val(new_string);
+                  runHash();
+                }
               }
 
               $("#plain_text_password").keyup(function() {
+                runHash();
+              });
 
-                if ( $("#plain_text_password").val().length > 6 )
+              function runHash() {
+                if ( $("#plain_text_password").val().length != 6 )
                 {
                   var md5hash = "Please enter a password of length 6";
                 }
@@ -153,7 +172,7 @@
                 }
                 
                 $("#md5-hash").text(md5hash);
-              });
+              }
             </script>
             <div id="canvas-example" class="example">
               <iframe _src="src/canvasphoto/index.html" scrolling="no" src="src/canvasphoto/index.html"></iframe>

@@ -134,7 +134,7 @@ public class Hash implements EntryPoint {
 								serverResponseLabel.setHTML(result);
 								dialogBox.center();
 								closeButton.setFocus(true);
-								Window.Location.replace("/hashview");
+//								Window.Location.replace("/hashview");
 							}
 						});
 			}

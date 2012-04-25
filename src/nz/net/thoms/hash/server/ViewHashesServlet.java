@@ -7,11 +7,13 @@ import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import nz.net.thoms.hash.mapreduce.HashMapper;
 import nz.net.thoms.hash.shared.Util;
 
 import com.google.api.client.http.GenericUrl;
@@ -35,6 +37,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
 public class ViewHashesServlet extends HttpServlet {
+	private static final Logger log = Logger.getLogger(HashMapper.class.getName());
 
 	static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -47,7 +50,10 @@ public class ViewHashesServlet extends HttpServlet {
 		out.println("<h1>Hashes</h1>");
 		try {
 			URI uri = new URI(req.getRequestURL().toString());
-			String host = uri.getScheme() +"://"+uri.getHost() + ":" + uri.getPort();
+			String host = uri.getScheme() +"://"+uri.getHost();
+			if (uri.getPort() != -1) {
+				host += ":" +uri.getPort();
+			}
 			DatastoreService datastore = DatastoreServiceFactory
 					.getDatastoreService();
 			Query query = new Query("MapReduceState");
@@ -56,6 +62,7 @@ public class ViewHashesServlet extends HttpServlet {
 			out.println("<table>");
 			out.println("<tr>");
 			out.println("<th>ID</th>");
+			out.println("<th>Status</th>");
 			out.println("<th>shards</th>");
 			out.println("<th>hashes/sec</th>");
 			out.println("<th>hashes done</th>");
@@ -65,6 +72,7 @@ public class ViewHashesServlet extends HttpServlet {
 				String id =  job.getKey().getName();
 				Task task = getTask(host, id);
 				out.println("<td>" + id + "</td>");
+				out.println("<td>" + job.getProperty("status") + "</td>");
 				Object hasheds;
 				int hashed = -1;
 				if ((hasheds = ((Map) task.get("counters")).get("Hashes:Checked")) != null) {
@@ -118,6 +126,7 @@ public class ViewHashesServlet extends HttpServlet {
 						request.addParser(new JsonHttpParser(JSON_FACTORY));
 					}
 				});
+		log.warning(host + "/mapreduce/command/get_job_detail?mapreduce_id=" + id);
 		GenericUrl url = new GenericUrl(host + "/mapreduce/command/get_job_detail?mapreduce_id=" + id);
 		HttpRequest request = requestFactory.buildGetRequest(url);
 		request.getHeaders().put("X-Requested-With", "XMLHttpRequest");

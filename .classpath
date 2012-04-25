@@ -2,13 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" output="test-classes" path="test"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-api-1.0-sdk-1.6.4.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-api-labs-1.6.4.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-jsr107cache-1.6.4.jar"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-mapper.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/charts4j-1.2.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/datanucleus-appengine-1.0.10.final.jar"/>
@@ -32,5 +27,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/google-http-client-1.8.3-beta.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/google-http-client-appengine-1.8.3-beta.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-all-1.9.6.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-mapper.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

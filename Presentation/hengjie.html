@@ -6,6 +6,7 @@
     <title>HTML5 Presentation</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
     <script type="text/javascript" src="./images/md5-hash.js"></script>
+    <script type="text/javascript" src="http://www.thimbleopensource.com/download/jquery/jquery.filter_input.js"></script>
     <link href="./HTML5 Presentation_files/css" rel="stylesheet" type="text/css">
     <link id="prettify-link" href="http://slides.html5rocks.com/src/prettify/prettify.css" rel="stylesheet" disabled="">
     <link href="http://slides.html5rocks.com/css/moon.css" class="theme" rel="stylesheet" media="screen">
@@ -117,7 +118,7 @@
           </section>
         <span class="counter"></span></div>-->
 
-        <div class="slide far-future" id="need-a-volunteer">
+        <div class="slide future" id="need-a-volunteer">
           <header>We need a volunteer</header>
           <style>
             span#md5-hash {
@@ -127,23 +128,57 @@
               vertical-align: middle;
               width: 810px;
             }
+
+            #iframe-gae {
+              margin-left: 240px;
+              margin-top: 150px;
+              padding: 0;
+              width: 332px;
+              height: 50px;
+              padding: 5px;
+              text-align:center;
+            }
+            #iframe-gae iframe {
+              width: 332px;
+              height: 50px;
+              border: none;
+              background: white;
+            }
           </style>
           <section class="">
-            <p>Please enter your plain text password</p>
+            <p>Please enter or say your plain text password</p>
             <input type="text" maxlength="10" size="20" x-webkit-speech onwebkitspeechchange="handleSpeech()" id="plain_text_password">
             <p>MD5 hash of your password</p>
             <span id="md5-hash" class="html"></span>
             <script type="text/javascript">
               $('#plain_text_password').filter_input({regex:'[a-z]'}); 
 
-              function handleSearchChange() 
+              function handleSpeech() 
               {
-                
+                // This removes the spaces in the input that we get from Chrome
+                var new_string = "";
+                for ( i=0; i < $("#plain_text_password").val().length; i++ )
+                {
+                  if ( $("#plain_text_password").val()[i] != " " )
+                  {
+                    // Only add characters to new string if it isn't a space
+                    new_string = new_string + $("#plain_text_password").val()[i]
+                  }
+                }
+
+                if ( new_string != "" )
+                {
+                  $("#plain_text_password").val(new_string);
+                  runHash();
+                }
               }
 
               $("#plain_text_password").keyup(function() {
+                runHash();
+              });
 
-                if ( $("#plain_text_password").val().length > 6 )
+              function runHash() {
+                if ( $("#plain_text_password").val().length != 6 )
                 {
                   var md5hash = "Please enter a password of length 6";
                 }
@@ -153,15 +188,15 @@
                 }
                 
                 $("#md5-hash").text(md5hash);
-              });
+              }
             </script>
-            <div id="canvas-example" class="example">
-              <iframe _src="src/canvasphoto/index.html" scrolling="no" src="src/canvasphoto/index.html"></iframe>
+            <div id="iframe-gae" class="example">
+              <iframe _src="http://hash7513.appspot.com/" scrolling="no" src="http://hash7513.appspot.com/"></iframe>
             </div>
           </section>
         <span class="counter"></span></div>
 
-        <div class="slide distant-slide" id="what-is-md5">
+        <div class="slide far-future" id="what-is-md5">
           <style>
 
             span#string {
@@ -280,8 +315,49 @@
             </div>
             <div style="clear: both; -webkit-margin-after: 1em;"></div>
             <div data-build="">
-              <span class="html field" style="left: 0px; font-size: 20px; width: 810px;">if b10a8db164e0754105b7a99be72e3fe5 == b10a8db164e0754105b7a99be72e3fe5</span>
+              <span class="html field" style="left: 0px; font-size: 20px; width: 810px;"><span style="font-weight: bolder; color: #ffffff">if</span> b10a8db164e0754105b7a99be72e3fe5 <span style="font-weight: bolder; color: #ffffff">==</span> b10a8db164e0754105b7a99be72e3fe5</span>
             </div>
+          </section>
+        <span class="counter"></span></div>
+
+        <div class="slide distant-slide" id="what-is-a-cracker">
+          <header>What is a MD5 hash cracker</header>
+          <style>
+            #what-cracker > li {
+              font-size: 25px;
+              line-height: 33px;
+              opacity: 0.85;
+            }
+            #what-cracker > li:hover {
+              opacity: 1;
+            }
+          </style>
+          <section class="" data-build="">
+            <ul id="what-cracker">
+              <li>MD5 Hash Algorithm is a one-way hash function</li>
+              <li>Need a way to quickly permute through alpha-numeric characters, hash each combination and compare it against the MD5 hash we're cracking.</li>
+            </ul>
+          </section>
+        <span class="counter"></span></div>
+
+        <div class="slide distant-slide" id="why-we-created-a-cracker">
+          <header>Why we created a MD5 hash cracker</header>
+          <style>
+            #why-cracker > li {
+              font-size: 25px;
+              line-height: 33px;
+              opacity: 0.85;
+            }
+            #why-cracker > li:hover {
+              opacity: 1;
+            }
+          </style>
+          <section class="" data-build="">
+            <ul id="why-cracker">
+              <li>Scenario 1: Hacker downloads the DB and wants to reverse the MD5 hash to get into an Admin account</li>
+              <li>Scenario 2: Administrator forgets their password and wants to reverse the MD5 hash to regain access</li>
+              <li>Scenario 3: Just for the LOLs</li>
+            </ul>
           </section>
         <span class="counter"></span></div>
 

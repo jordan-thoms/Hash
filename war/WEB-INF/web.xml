@@ -7,25 +7,15 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>nz.net.thoms.hash.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/hash/greet</url-pattern>
-  </servlet-mapping>
-  
-  <servlet>
     <servlet-name>hashServlet</servlet-name>
-    <servlet-class>nz.net.thoms.hash.server.HashServlet</servlet-class>
+    <servlet-class>nz.net.thoms.hash.server.HashServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
     <servlet-name>hashServlet</servlet-name>
-    <url-pattern>/hashmap</url-pattern>
+    <url-pattern>/hash/hash</url-pattern>
   </servlet-mapping>
-  
+    
   <servlet>
     <servlet-name>viewServlet</servlet-name>
     <servlet-class>nz.net.thoms.hash.server.ViewHashesServlet</servlet-class>

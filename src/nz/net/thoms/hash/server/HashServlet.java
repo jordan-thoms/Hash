@@ -43,9 +43,8 @@ public class HashServlet extends HttpServlet {
 			conf.setClass("mapreduce.map.class", HashMapper.class, Mapper.class);
 			conf.setClass("mapreduce.inputformat.class", DatastoreInputFormat.class, InputFormat.class);
 			conf.set(DatastoreInputFormat.ENTITY_KIND_KEY, "Hash");
-			conf.set("mapreduce.mapper.inputprocessingrate", "1000000");
-			conf.set("mapreduce.mapper.shardcount", "20");
-
+			conf.set("mapreduce.mapper.inputprocessingrate", "1000000000");
+			conf.set("mapreduce.mapper.shardcount", "100");
 			// Render it as an HTML form so that the user can edit it.
 			String html = generateHtml(
 					ConfigurationXmlUtil.convertConfigurationToXml(conf));

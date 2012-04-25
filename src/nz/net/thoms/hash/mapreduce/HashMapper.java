@@ -54,12 +54,13 @@ public class HashMapper extends AppEngineMapper<Key, Entity, NullWritable, NullW
 			long length = (Long) value.getProperty("length");
 			log.warning("Mapping key: " + key + " hash: " + hash + " prefix: " + prefix + " length: " + length);
 			int counter = 0;
+			MD5 md5 = new MD5();
+
 			for (String postfix : Util.permute(Util.chars, (int) length - prefix.length())) {
 				String candidate = prefix.concat(postfix);
 //				log.warning(candidate + " with prefix: " + prefix);
 				//String hashC = DigestUtils.md5Hex(candidate);
-
-				MD5 md5 = new MD5();
+				md5.Init();
 				try {
 					md5.Update(candidate, null);
 				} catch (UnsupportedEncodingException e) {

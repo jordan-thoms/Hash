@@ -40,7 +40,7 @@ public class HashServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public String submitHash(String hash) throws IllegalArgumentException {
-		HashEntityGenerator.generatePutEntities(hash, 4);
+		HashEntityGenerator.generatePutEntities(hash, 6);
 		Configuration conf = new Configuration(false);
 		conf.setClass("mapreduce.map.class", HashMapper.class, Mapper.class);
 		conf.setClass("mapreduce.inputformat.class", DatastoreInputFormat.class, InputFormat.class);

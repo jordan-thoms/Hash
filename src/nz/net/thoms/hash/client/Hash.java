@@ -52,10 +52,6 @@ public class Hash implements EntryPoint {
 		RootPanel.get("hashFieldContainer").add(hashField);
 		RootPanel.get("sendButtonContainer").add(sendButton);
 
-		// Focus the cursor on the name field when the app loads
-		hashField.setFocus(true);
-		hashField.selectAll();
-
 		// Create the popup dialog box
 		final DialogBox dialogBox = new DialogBox();
 		dialogBox.setText("Remote Procedure Call");

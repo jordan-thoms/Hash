@@ -286,13 +286,52 @@
         <span class="counter"></span></div>
 
         <div class="slide distant-slide" id="mapreduce">
-          <header><h1>Google App Engine's mapper</h1></header>
+          <header><h1>MapReduce and Google App Engine</h1></header>
           <section>
-            <p>MapReduce is a paradigm for distributing work on huge datasets over a cluster of servers. The term was introduced by Google in 2004, and it is used widely at Google</p>
+            <p>MapReduce is a paradigm for distributing work on highly parallelizable problems with huge datasets over a cluster of servers. MapReduce was introduced by Google in 2004, and it is used widely at Google.</p>
+            <br /><br />
+            <p>Google provides a modified version of their implementation to the public through Google App Engine, and that's what we have used for this prototype.</p>
+            <br /><br />
             <p>The Map Reduce paradigm consists of three main parts: The mapper, the shuffler, and the reducer. I will describe the mapper only, since it is the only part needed for our purposes.</p>
           </section>
         <span class="counter"></span></div>
 
+        <div class="slide distant-slide" id="mapper">
+          <header><h1>The Mapper</h1></header>
+          <section>
+            <p>The framework takes a large table of entities (which consist of a key with values attached to it), and shards them into a number of groups of approximately equal size. </p>
+            <div data-build="">
+              <span class="html field" style="float:left; font-size: 20px; width: 200px;">K: 5 V: 10
+              <br />K: 6 V: 10
+            <br />K: 8 V: 12
+            <br />K: 1 V: 1</span>
+              <img width="60px" src="./images/arrow-right.png"></img>
+              <span class="html field" style="float: right; font-size: 20px; width: 200px;">K: 5 V: 10
+              <br />K: 1 V: 1</span>
+              <span class="html field" style="float: right; margin-top: 5px;clear: right; font-size: 20px; width: 200px;">K: 8 V: 12
+            <br />K: 6 V: 10</span>
+
+              <p style="clear:both">Then, a server is spun up for each shard, and the map() function is called for each entity. This allows for very high performance, since the servers are communicating only with their shard of the datastore, rather than communicating with each other.</p>
+            </div>
+          </section>
+        <span class="counter"></span></div>
+
+        <div class="slide distant-slide" id="mapper-md5">
+          <header><h1>The Mapper - Using it for cracking</h1></header>
+          <section>
+            <p>To apply this to the cracking problem, we generate a table of entites for the possible values that should be checked. A initial thought on how to do this would be to have a entity for every possible candidate for the password. However, this would mean generating millions of entities, which would take a long time to write and read</p>
+            <p>Instead, we use a prefix/postfix system. Each entity specifies a prefix that should be checked, along with the correct length. So to check 6 character passwords, we have jobs with the prefixes aa, ab, ac etc. When the job is processed, the system considers the difference between the prefix's length and the length it has been told to check, and checks each of the possibilities for what could go in between.</p>
+            <p>Therfore, the entities consist of:
+              <ul>
+                <li>The hash that is being cracked</li>
+                <li>The Prefix to use</li>
+                <li>The length to use</li>
+                <ul>
+              </p>
+
+
+          </section>
+        <span class="counter"></span></div>
 
         <div class="slide distant-slide" id="table-of-contents">
           <header><h1>Today, we will cover...</h1></header>

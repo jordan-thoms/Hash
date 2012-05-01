@@ -12,6 +12,11 @@ public class HashInputSplit implements InputSplit {
 	private List<String> prefixes;
 	private int length;
 		
+	
+	public HashInputSplit(List<String> _prefixes, int _length) {
+		prefixes = _prefixes;
+		length = _length;
+	}
 	@Override
 	public void readFields(DataInput in) throws IOException {
 		length = in.readInt();
@@ -33,14 +38,13 @@ public class HashInputSplit implements InputSplit {
 
 	@Override
 	public long getLength() throws IOException {
-		// TODO Auto-generated method stub
-		return 0;
+		// As the hadoop definitive guide states, this is just used for ordering the splits so it doesn't have to be accuriate.
+		return prefixes.size() * 4;
 	}
 
 	@Override
 	public String[] getLocations() throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+        return new String[]{};
 	}
 
 	public List<String> getPrefixes() {

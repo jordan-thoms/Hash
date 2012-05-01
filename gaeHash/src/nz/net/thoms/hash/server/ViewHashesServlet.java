@@ -48,6 +48,15 @@ public class ViewHashesServlet extends HttpServlet {
 		PrintWriter out = resp.getWriter();
 		out.println("<html><head><meta http-equiv=\"refresh\" content=\"15\"></head><body>");
 		out.println("<h1>Hashes</h1>");
+		long starta = System.currentTimeMillis();
+		int i;
+		for (i=0; i< 1000000; i++) {
+			i += 2;
+			i += (int) Math.sin(i * (i + (int) System.currentTimeMillis()));
+		}
+		long enda = System.currentTimeMillis();
+		out.println("took " + (enda - starta) + " i:" + i);
+
 		try {
 			URI uri = new URI(req.getRequestURL().toString());
 			String host = uri.getScheme() +"://"+uri.getHost();
@@ -126,7 +135,6 @@ public class ViewHashesServlet extends HttpServlet {
 						request.addParser(new JsonHttpParser(JSON_FACTORY));
 					}
 				});
-		log.warning(host + "/mapreduce/command/get_job_detail?mapreduce_id=" + id);
 		GenericUrl url = new GenericUrl(host + "/mapreduce/command/get_job_detail?mapreduce_id=" + id);
 		HttpRequest request = requestFactory.buildGetRequest(url);
 		request.getHeaders().put("X-Requested-With", "XMLHttpRequest");

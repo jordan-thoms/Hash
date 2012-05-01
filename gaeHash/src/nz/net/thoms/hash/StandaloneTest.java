@@ -6,9 +6,6 @@ import java.util.Date;
 
 import nz.net.thoms.hash.shared.Util;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import com.twmacinta.util.MD5;
 
 public class StandaloneTest {
@@ -17,6 +14,23 @@ public class StandaloneTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		long starta = System.currentTimeMillis();
+		int i;
+		for (i=0; i< 1000000; i++) {
+			i += 2;
+			i += (int) Math.sin(i * (i + (int) System.currentTimeMillis()));
+		}
+		long enda = System.currentTimeMillis();
+		System.out.println("took " + (enda - starta) + " i:" + i);
+
+		
+		MD5.initNativeLibrary(true);
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		String hash = "95ebc3c7b3b9f1d2c40fec14415d3cb8";
 		String prefix = "";
 		long length = 4;

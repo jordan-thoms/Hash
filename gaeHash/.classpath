@@ -28,5 +28,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/google-http-client-appengine-1.8.3-beta.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/jackson-all-1.9.6.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-mapper.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

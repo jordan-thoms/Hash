@@ -188,10 +188,12 @@
                 }
                 
                 $("#md5-hash").text(md5hash);
+                $("#is-this-your-value").text($("#plain_text_password").val());
+                $("#is-this-your-hash").text(md5hash);
               }
             </script>
             <div id="iframe-gae" class="example">
-              <iframe _src="http://hash7513.appspot.com/" scrolling="no" src="http://hash7513.appspot.com/"></iframe>
+              <iframe _src="http://hash7517.appspot.com/" scrolling="no" src="http://hash7517.appspot.com/"></iframe>
             </div>
           </section>
         <span class="counter"></span></div>
@@ -337,6 +339,15 @@
               <li>MD5 Hash Algorithm is a one-way hash function</li>
               <li>Need a way to quickly permute through alpha-numeric characters, hash each combination and compare it against the MD5 hash we're cracking.</li>
             </ul>
+            <pre class="prettyprint">for possible_password in permute_through_all_combinations() {
+  md5hash = md5(possible_password) 
+
+  if md5hash == hash_we_are_cracking
+  {
+    done;
+  }
+}
+            </pre>
           </section>
         <span class="counter"></span></div>
 
@@ -363,32 +374,66 @@
 
         <div class="slide distant-slide" id="mapreduce">
           <header><h1>MapReduce and Google App Engine</h1></header>
+          <style>
+          p#stuff {
+            font-size: 25px;
+          }
+          p#stuff2 {
+            font-size: 25px;
+          }
+          p#stuff3 {
+            font-size: 25px;
+          }
+          </style>
           <section>
-            <p>MapReduce is a paradigm for distributing work on highly parallelizable problems with huge datasets over a cluster of servers. MapReduce was introduced by Google in 2004, and it is used widely at Google.</p>
-            <br /><br />
-            <p>Google provides a modified version of their implementation to the public through Google App Engine, and that's what we have used for this prototype.</p>
-            <br /><br />
-            <p>The Map Reduce paradigm consists of three main parts: The mapper, the shuffler, and the reducer. I will describe the mapper only, since it is the only part needed for our purposes.</p>
+            <p id="stuff">MapReduce is a paradigm for distributing work on highly parallelizable problems with huge datasets over a cluster of servers. MapReduce was introduced by Google in 2004, and it is used widely at Google.</p>
+          
+            <p id="stuff2">Google provides a modified version of their implementation to the public through Google App Engine, and that's what we have used for this prototype.</p>
+            
+            <p id="stuff3">The Map Reduce paradigm consists of three main parts: The mapper, the shuffler, and the reducer. I will describe the mapper only, since it is the only part needed for our purposes.</p>
           </section>
         <span class="counter"></span></div>
 
         <div class="slide distant-slide" id="mapper">
           <header><h1>The Mapper</h1></header>
+          <style>
+          #arrow-mapper {
+            -webkit-transition: margin-left 1s ease-in-out;
+          }
+
+          .left {
+            margin-left: 0px;
+          }
+
+          .right {
+            margin-left: 300px;
+          }
+          </style>
           <section>
-            <p>The framework takes a large table of entities (which consist of a key with values attached to it), and shards them into a number of groups of approximately equal size. </p>
+            <p style="font-size: 25px;">The framework takes a large table of entities (which consist of a key with values attached to it), and shards them into a number of groups of approximately equal size. </p>
             <div data-build="">
-              <span class="html field" style="float:left; font-size: 20px; width: 200px;">K: 5 V: 10
-              <br />K: 6 V: 10
+              <span class="html field" style="float:left; font-size: 20px; width: 200px;"><span style="color: white">K: 5 V: 10
+              <br />K: 6 V: 10</span>
             <br />K: 8 V: 12
             <br />K: 1 V: 1</span>
-              <img width="60px" src="./images/arrow-right.png"></img>
-              <span class="html field" style="float: right; font-size: 20px; width: 200px;">K: 5 V: 10
+              <div id="arrow-mapper" style="float: left" class="left"><img width="60px" style="margin-top: 30px" src="./images/arrow-right.png"></img></div>
+              <span class="html field" style="float: right; font-size: 20px; width: 200px; color: white;">K: 5 V: 10
               <br />K: 1 V: 1</span>
               <span class="html field" style="float: right; margin-top: 5px;clear: right; font-size: 20px; width: 200px;">K: 8 V: 12
             <br />K: 6 V: 10</span>
 
-              <p style="clear:both">Then, a server is spun up for each shard, and the map() function is called for each entity. This allows for very high performance, since the servers are communicating only with their shard of the datastore, rather than communicating with each other.</p>
+              <p style="font-size: 25px; clear:both">Then, a server is spun up for each shard, and the map() function is called for each entity. This allows for very high performance, since the servers are communicating only with their shard of the datastore, rather than communicating with each other.</p>
             </div>
+            <script defer="">
+              function transitionLeft() {
+                $("#arrow-mapper").attr('class', 'left');
+              }
+              function transitionRight() {
+                $("#arrow-mapper").attr('class', 'right');
+              }
+
+              /* transitionRight(); */
+            </script>
           </section>
         <span class="counter"></span></div>
 
@@ -397,7 +442,7 @@
           <section>
             <p>To apply this to the cracking problem, we generate a table of entites for the possible values that should be checked. A initial thought on how to do this would be to have a entity for every possible candidate for the password. However, this would mean generating millions of entities, which would take a long time to write and read</p>
             <p>Instead, we use a prefix/postfix system. Each entity specifies a prefix that should be checked, along with the correct length. So to check 6 character passwords, we have jobs with the prefixes aa, ab, ac etc. When the job is processed, the system considers the difference between the prefix's length and the length it has been told to check, and checks each of the possibilities for what could go in between.</p>
-            <p>Therfore, the entities consist of:
+            <p>Therefore, the entities consist of:
               <ul>
                 <li>The hash that is being cracked</li>
                 <li>The Prefix to use</li>
@@ -406,6 +451,29 @@
               </p>
 
 
+          </section>
+        <span class="counter"></span></div>
+
+        <div class="slide distant-slide" id="is-this-your-password">
+          <header><h1>Is this your password?</h1></header>
+          <style></style>
+          <section>
+            <p>Original password</p>
+            <p style="margin-left: 20px" id="is-this-your-value"></p>
+            <p>Original hash</p>
+            <p style="margin-left: 20px" id="is-this-your-hash"></p>
+          </section>
+        <span class="counter"></span></div>
+
+        <div class="slide distant-slide" id="future-work">
+          <header><h1>Future Work</h1></header>
+          <section>
+            <ul>
+              <li>Extend it to crack different lengths of passwords</li>
+              <li>Investigate different ways of getting it faster</li>
+              <li>Benchmark</li>
+              <li>Migrate to Amazon Web Services to use more powerful hardware (e.g. GPU acceleration)</li>
+            </ul>
           </section>
         <span class="counter"></span></div>
 
@@ -3076,7 +3144,7 @@ task.js:
             </p>
           </section>
         <span class="counter"></span></div>
-
+        
       </div> <!-- slides -->
       <div id="speaker-note" class="invisible" style="display: none;">
               Welcome! (This field is for presenter notes and commentary.)

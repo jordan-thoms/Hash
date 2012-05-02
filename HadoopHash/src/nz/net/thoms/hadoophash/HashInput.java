@@ -16,7 +16,8 @@ public class HashInput implements InputFormat<WritableComparable, HashValue> {
 
 	@Override
 	public RecordReader<WritableComparable, HashValue> getRecordReader(
-			InputSplit arg0, JobConf arg1, Reporter arg2) throws IOException {
+			InputSplit split, JobConf job, Reporter reporter) throws IOException {
+		return new HashRecordReader(job.get("hash"), ((HashInputSplit) split).getPrefixes(), ((HashInputSplit) split).getPasswordLength());
 	}
 
 	@Override
@@ -32,12 +33,12 @@ public class HashInput implements InputFormat<WritableComparable, HashValue> {
 		if (!prefixes.isEmpty()) {
 			int lastPos = 0;
 			for (int i = 0; i < numSplits -1; i++) {
-				splits.add(new HashInputSplit(prefixes.subList(lastPos, lastPos + prefixesPerSplit), PASSWORD_LENGTH));
+				splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, lastPos + prefixesPerSplit), PASSWORD_LENGTH));
 				lastPos = lastPos + prefixesPerSplit;
 			}
-			splits.add(new HashInputSplit(prefixes.subList(lastPos, prefixes.size()), PASSWORD_LENGTH));
+			splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, prefixes.size()), PASSWORD_LENGTH));
 		} else {
-			splits.add(new HashInputSplit(prefixes, PASSWORD_LENGTH));
+			splits.add(HashInputSplit.newSplit(prefixes, PASSWORD_LENGTH));
 		}
 		
 		return splits.toArray(new InputSplit[splits.size()]);

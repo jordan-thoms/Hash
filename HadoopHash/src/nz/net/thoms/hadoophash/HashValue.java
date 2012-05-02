@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.apache.hadoop.io.Writable;
 
 public class HashValue implements Writable {
+
 	private String hash;
 	private String prefix;
 	private int length;

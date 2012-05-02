@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapred.MapReduceBase;
@@ -13,11 +14,11 @@ import org.apache.hadoop.mapred.Reporter;
 
 import com.twmacinta.util.MD5;
 
-public class HashMapper extends MapReduceBase implements Mapper<WritableComparable, HashValue, String, String> {
+public class HashMapper extends MapReduceBase implements Mapper<WritableComparable, HashValue, Text, Text> {
 	
 	@Override
 	public void map(WritableComparable key, HashValue value,
-			OutputCollector<String, String> output, Reporter reporter) throws IOException {
+			OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
 		String hash = value.getHash();
 		String prefix = value.getPrefix();
 		int length = value.getLength();
@@ -53,7 +54,7 @@ public class HashMapper extends MapReduceBase implements Mapper<WritableComparab
 			
 			if (hash.equals(hashC)) {
 				System.out.println("Password is " + candidate);
-				output.collect(hash, candidate);
+				output.collect(new Text(hash), new Text(candidate));
 			}
 			counter++;
 		}

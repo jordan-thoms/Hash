@@ -10,16 +10,18 @@ import org.apache.hadoop.mapred.InputSplit;
 
 public class HashInputSplit implements InputSplit {
 	private List<String> prefixes;
-	private int length;
+	private int passwordLength;
 		
 	
-	public HashInputSplit(List<String> _prefixes, int _length) {
-		prefixes = _prefixes;
-		length = _length;
+	public static HashInputSplit newSplit(List<String> _prefixes, int _length) {
+		HashInputSplit split = new HashInputSplit();
+		split.setPrefixes(_prefixes);
+		split.setPasswordLength(_length);
+		return split;
 	}
 	@Override
 	public void readFields(DataInput in) throws IOException {
-		length = in.readInt();
+		passwordLength = in.readInt();
 		int count = in.readInt();
 		prefixes = new ArrayList<String>(count);
 		for (int i=0; i < count; i++) {
@@ -29,7 +31,7 @@ public class HashInputSplit implements InputSplit {
 
 	@Override
 	public void write(DataOutput out) throws IOException {
-		out.writeInt(length);
+		out.writeInt(passwordLength);
 		out.writeInt(prefixes.size());
 		for (int i=0; i < prefixes.size(); i++) {
 			out.writeUTF(prefixes.get(i));
@@ -55,8 +57,12 @@ public class HashInputSplit implements InputSplit {
 		this.prefixes = prefixes;
 	}
 
-	public void setLength(int length) {
-		this.length = length;
+	public void setPasswordLength(int length) {
+		this.passwordLength = length;
+	}
+	
+	public int getPasswordLength() {
+		return this.passwordLength;
 	}
 
 }

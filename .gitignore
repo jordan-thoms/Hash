@@ -7,3 +7,5 @@
 
 gwt-unitCache/
 HadoopHash/output*
+HadoopHash/ant/dist/*
+HadoopHash/ant/published//*

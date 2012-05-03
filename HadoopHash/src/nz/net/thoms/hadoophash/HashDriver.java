@@ -29,7 +29,7 @@ public class HashDriver {
 		conf.setMapperClass(nz.net.thoms.hadoophash.HashMapper.class);
 		
 		conf.setOutputFormat(TextOutputFormat.class);
-		DateFormat df = new SimpleDateFormat("mm_hh");
+		DateFormat df = new SimpleDateFormat("mm_hh_ss");
 
 		FileOutputFormat.setOutputPath(conf, new Path("output" + df.format(new Date())));
 		conf.set("hash", "1dba3a19a3a8d98dc26c4da74e11db70");

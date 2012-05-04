@@ -36,7 +36,11 @@ public class HashRecordReader implements RecordReader<WritableComparable, HashVa
 
 	@Override
 	public float getProgress() throws IOException {
-		return pos / prefixes.size();
+		if (prefixes.size() == 0) {
+			return 0.0f;
+		} else {
+			return pos / prefixes.size();
+		}
 	}
 
 	@Override

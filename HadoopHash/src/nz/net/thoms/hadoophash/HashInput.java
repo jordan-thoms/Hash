@@ -12,7 +12,6 @@ import org.apache.hadoop.mapred.Reporter;
 
 public class HashInput implements InputFormat<WritableComparable, HashValue> {
 	private static int POSTFIX_LENGTH = 4;
-	private static int PASSWORD_LENGTH = 5;
 
 	@Override
 	public RecordReader<WritableComparable, HashValue> getRecordReader(
@@ -22,7 +21,9 @@ public class HashInput implements InputFormat<WritableComparable, HashValue> {
 
 	@Override
 	public InputSplit[] getSplits(JobConf job, int numSplits) throws IOException {
-		int prefix_length = PASSWORD_LENGTH - POSTFIX_LENGTH;
+		numSplits = job.getInt("tasks", 100);
+		int password_length = job.getInt("password_length", 5);
+		int prefix_length =  password_length - POSTFIX_LENGTH;
 		if  (prefix_length < 0) {
 			prefix_length = 0;
 		}
@@ -33,12 +34,12 @@ public class HashInput implements InputFormat<WritableComparable, HashValue> {
 		if (!prefixes.isEmpty()) {
 			int lastPos = 0;
 			for (int i = 0; i < numSplits -1; i++) {
-				splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, lastPos + prefixesPerSplit), PASSWORD_LENGTH));
+				splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, lastPos + prefixesPerSplit), password_length));
 				lastPos = lastPos + prefixesPerSplit;
 			}
-			splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, prefixes.size()), PASSWORD_LENGTH));
+			splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, prefixes.size()), password_length));
 		} else {
-			splits.add(HashInputSplit.newSplit(prefixes, PASSWORD_LENGTH));
+			splits.add(HashInputSplit.newSplit(prefixes, password_length));
 		}
 		
 		return splits.toArray(new InputSplit[splits.size()]);

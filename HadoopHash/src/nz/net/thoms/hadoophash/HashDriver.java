@@ -28,7 +28,7 @@ public class HashDriver {
 		conf.setMapperClass(nz.net.thoms.hadoophash.HashMapper.class);
 		conf.setNumTasksToExecutePerJvm(1000);
 		conf.setOutputFormat(TextOutputFormat.class);
-		DateFormat df = new SimpleDateFormat("mm_hh");
+		DateFormat df = new SimpleDateFormat("mm_hh_ss");
 
 		FileOutputFormat.setOutputPath(conf, new Path("output" + df.format(new Date())));
 		conf.set("hash", "594f803b380a41396ed63dca39503542");

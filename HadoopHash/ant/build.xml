@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="HadoopHash" default="publish">
+    <description>
+       	Hadoop Hash Ant builder
+    </description>
+
+    <property name="version" value="1.0.0" />
+    <property name="dist.dir" value="dist" />
+    <property name="publish.dir" value="published" />
+    <property name="classes.jar" value="${dist.dir}/classes.jar" />
+    <property name="classes.dir" value="../bin" />
+    <property name="sources.jar" value="${dist.dir}/sources.jar" />
+    <property name="sources.dir" value="../src" />
+
+    <target name="publish" depends="package" description="Published the files">
+        <copy file="${classes.jar}" tofile="${publish.dir}/classes-${version}.jar" />
+        <copy file="${sources.jar}" tofile="${publish.dir}/sources-${version}.jar" />
+    </target>
+
+    <target name="package" depends="prepare" description="Packages the jars">
+        <jar destfile="${classes.jar}">
+            <fileset dir="${classes.dir}">
+                <include name="**/*.class" />
+            </fileset>
+        </jar>
+        <jar destfile="${sources.jar}">
+            <fileset dir="${sources.dir}">
+                <include name="**/*.java" />
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="prepare">
+        <mkdir dir="${dist.dir}" />
+        <mkdir dir="${publish.dir}" />
+    </target>
+
+</project>

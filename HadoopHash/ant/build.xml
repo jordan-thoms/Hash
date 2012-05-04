@@ -13,11 +13,20 @@
     <property name="sources.dir" value="../src" />
     <property name="hashcat.zip" value="${dist.dir}/hashcat.zip" />
     <property name="hashcat.dir" value="../hashcat" />
+    <property name="deploy.sh" value="../deploy_to_server.sh" />
+    <property name="create.sh" value="../create_cluster.sh" />
+    <property name="expand.sh" value="../expand_cluster.sh" />
+    <property name="tunnel.sh" value="../tunnel.sh" />
+
 
     <target name="publish" depends="package, packageHashcat" description="Published the files">
         <copy file="${classes.jar}" tofile="${publish.dir}/classes-${version}.jar" />
         <copy file="${sources.jar}" tofile="${publish.dir}/sources-${version}.jar" />
         <copy file="${hashcat.zip}" tofile="${publish.dir}/hashcat-${version}.zip" />
+        <copy file="${deploy.sh}" tofile="${publish.dir}/deploy-to-server.sh" />
+        <copy file="${create.sh}" tofile="${publish.dir}/create_cluster.sh" />
+        <copy file="${expand.sh}" tofile="${publish.dir}/expand_cluster.sh" />
+        <copy file="${tunnel.sh}" tofile="${publish.dir}/tunnel.sh" />
     </target>
 
     <target name="package" depends="prepare" description="Packages the jars">

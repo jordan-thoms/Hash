@@ -1,9 +1,12 @@
 package nz.net.thoms.hadoophash;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.FileOutputFormat;
@@ -14,7 +17,7 @@ import org.apache.hadoop.mapred.TextOutputFormat;
 
 public class HashDriver {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws URISyntaxException {
 		JobClient client = new JobClient();
 		JobConf conf = new JobConf(nz.net.thoms.hadoophash.HashDriver.class);
 
@@ -28,6 +31,9 @@ public class HashDriver {
 		conf.setMapperClass(nz.net.thoms.hadoophash.HashMapper.class);
 		conf.setNumTasksToExecutePerJvm(1000);
 		conf.setOutputFormat(TextOutputFormat.class);
+		
+	    DistributedCache.addCacheArchive(new URI("/app/hashcat.zip#hashcat"), conf);
+	    DistributedCache.createSymlink(conf);
 		DateFormat df = new SimpleDateFormat("mm_hh_ss");
 
 		FileOutputFormat.setOutputPath(conf, new Path("output" + df.format(new Date())));

@@ -2,6 +2,9 @@ package nz.net.thoms.hadoophash;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapred.InputFormat;
@@ -38,12 +41,21 @@ public class HashInput implements InputFormat<WritableComparable, HashValue> {
 		if (!prefixes.isEmpty()) {
 			int lastPos = 0;
 			if (prefixesPerSplit > 0) {
-				for (int i = 0; i < numSplits -1; i++) {
-					splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, lastPos + prefixesPerSplit), password_length));
+				for (int i = 0; i < numSplits; i++) {
+					splits.add(HashInputSplit.newSplit(new ArrayList<String>(prefixes.subList(lastPos, lastPos + prefixesPerSplit)), password_length));
 					lastPos = lastPos + prefixesPerSplit;
 				}
 			}
-			splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, prefixes.size()), password_length));
+			List<String> leftOvers = new ArrayList<String>(prefixes.subList(lastPos, prefixes.size()));
+			while (!leftOvers.isEmpty()) {
+				for (int i = 0; i < numSplits; i++) {
+					if (leftOvers.isEmpty()) {
+						break;
+					}
+					String leftover = leftOvers.remove(0);
+					splits.get(i).getPrefixes().add(leftover);
+				}
+			}
 		} else {
 			splits.add(HashInputSplit.newSplit(prefixes, password_length));
 		}

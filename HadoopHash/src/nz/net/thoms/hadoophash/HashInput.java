@@ -31,11 +31,17 @@ public class HashInput implements InputFormat<WritableComparable, HashValue> {
 		ArrayList<HashInputSplit> splits = new ArrayList<HashInputSplit>(numSplits);
 		ArrayList<String> prefixes = Util.permute(Util.chars, prefix_length);
 		int prefixesPerSplit = prefixes.size() / numSplits;
+		if (prefixesPerSplit == 0) {
+			numSplits = 5;
+			prefixesPerSplit = prefixes.size() / numSplits;
+		}
 		if (!prefixes.isEmpty()) {
 			int lastPos = 0;
-			for (int i = 0; i < numSplits -1; i++) {
-				splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, lastPos + prefixesPerSplit), password_length));
-				lastPos = lastPos + prefixesPerSplit;
+			if (prefixesPerSplit > 0) {
+				for (int i = 0; i < numSplits -1; i++) {
+					splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, lastPos + prefixesPerSplit), password_length));
+					lastPos = lastPos + prefixesPerSplit;
+				}
 			}
 			splits.add(HashInputSplit.newSplit(prefixes.subList(lastPos, prefixes.size()), password_length));
 		} else {

@@ -11,10 +11,13 @@
     <property name="classes.dir" value="../bin" />
     <property name="sources.jar" value="${dist.dir}/sources.jar" />
     <property name="sources.dir" value="../src" />
+    <property name="hashcat.zip" value="${dist.dir}/hashcat.zip" />
+    <property name="hashcat.dir" value="../hashcat" />
 
-    <target name="publish" depends="package" description="Published the files">
+    <target name="publish" depends="package, packageHashcat" description="Published the files">
         <copy file="${classes.jar}" tofile="${publish.dir}/classes-${version}.jar" />
         <copy file="${sources.jar}" tofile="${publish.dir}/sources-${version}.jar" />
+        <copy file="${hashcat.zip}" tofile="${publish.dir}/hashcat-${version}.zip" />
     </target>
 
     <target name="package" depends="prepare" description="Packages the jars">
@@ -28,6 +31,14 @@
                 <include name="**/*.java" />
             </fileset>
         </jar>
+    </target>
+
+    <target name="packageHashcat" depends="prepare" description="Packages hashcat">
+        <zip destfile="${hashcat.zip}">
+            <fileset dir="${hashcat.dir}">
+                <include name="*" />
+            </fileset>
+        </zip>
     </target>
 
     <target name="prepare">

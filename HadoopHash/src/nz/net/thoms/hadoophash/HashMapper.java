@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import org.apache.hadoop.filecache.DistributedCache;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
@@ -24,7 +26,7 @@ public class HashMapper extends MapReduceBase implements Mapper<WritableComparab
 		this.job = job;
 	}
 	
-	private final HashExecutor hashExecutor = new SimpleHashExecutor();
+	private final HashExecutor hashExecutor = new HashcatHashExecutor();
 	
 	@Override
 	public void map(WritableComparable key, HashValue value,

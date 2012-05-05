@@ -27,10 +27,14 @@ public class HashInput implements InputFormat<WritableComparable, HashValue> {
 		numSplits = job.getInt("tasks", 100);
 		int password_length = job.getInt("password_length", 5);
 		int prefix_length =  password_length - POSTFIX_LENGTH;
-		if  (prefix_length < 0) {
-			prefix_length = 0;
+		if  (prefix_length <= 0) {
+			ArrayList<String> prefixes = new ArrayList<String>();
+			prefixes.add("");
+			ArrayList<HashInputSplit> splits = new ArrayList<HashInputSplit>();
+			splits.add(HashInputSplit.newSplit(prefixes, password_length));
+			return splits.toArray(new InputSplit[splits.size()]);	
 		}
-		
+
 		ArrayList<HashInputSplit> splits = new ArrayList<HashInputSplit>(numSplits);
 		ArrayList<String> prefixes = Util.permute(Util.chars, prefix_length);
 		int prefixesPerSplit = prefixes.size() / numSplits;
@@ -56,10 +60,8 @@ public class HashInput implements InputFormat<WritableComparable, HashValue> {
 					splits.get(i).getPrefixes().add(leftover);
 				}
 			}
-		} else {
-			splits.add(HashInputSplit.newSplit(prefixes, password_length));
 		}
-		
+
 		return splits.toArray(new InputSplit[splits.size()]);
 	}
 }

@@ -254,10 +254,11 @@ services:
       <div id="benchmark">
         <div class="page-header">
           <h1>Performance Benchmark <small>results</small></h1>
+          <p> We achieved a linear speedup as we increased the number of nodes.</p>
+          <img src="graph1.jpg">
+          <br />
+          <img src="graph2.jpg">
         </div>
-          <div id="test1" style="width: 100%;left:0;position:absolute">
-    <svg></svg>
-  </div>
       </div>
 
       <hr>
@@ -289,7 +290,7 @@ services:
       $('#learn-more').scrollspy()
     </script>
 
-    <script src="http://d3js.org/d3.v2.js"></script>
+  <!--  <script src="http://d3js.org/d3.v2.js"></script>
 <script src="nvd3/nv.d3.js"></script>
 <script src="nvd3/src/tooltip.js"></script>
 <script src="nvd3/src/models/legend.js"></script>
@@ -298,15 +299,20 @@ services:
 <script src="nvd3/src/models/line.js"></script>
 <script src="nvd3/src/models/lineWithFocus.js"></script>
 <script src="stream_layers.js"></script>
-<script>
+ <script>
 
-  var test_data = stream_layers(3,128,.1).map(function(data, i) {
-    return { 
-      key: 'Stream' + i,
-      values: data
-    };
-  });
+  // var test_data = stream_layers(3,128,.1).map(function(data, i) {
+  //   return { 
+  //     key: 'Stream' + i,
+  //     values: data
+  //   };
+  // });
+var test_data = [ {
+  key: "c1.large",
+  values: [{ x: 1, y: 43610706},  { x: 2, y: 89839020}, { x: 4, y: 176546134}, ]
 
+}
+];
 nv.addGraph({
   generate: function() {
       var width = nv.utils.windowSize().width - 40,
@@ -402,7 +408,7 @@ function sinAndCos() {
 }
 
 
-</script>
+</script> -->
 
   </body>
 </html>

@@ -20,8 +20,8 @@ public class HashcatHashExecutor implements HashExecutor {
 		try {
 			int postfix_length = length - prefix.length();
 			String mask = prefix + StringUtils.repeat("?1", postfix_length);
-			System.out.println("hashcat/hash.sh " + hash + " " + mask);
-			Process p = r.exec("hashcat/hash.sh " + hash + " " + mask);
+			System.out.println("hashcat/hash.sh " + hash + " \"" + mask + "\"");
+			Process p = r.exec("hashcat/hash.sh " + hash + " \"" + mask + "\"");
 			InputStream in = p.getInputStream();
 			BufferedInputStream buf = new BufferedInputStream(in);
 			InputStreamReader inread = new InputStreamReader(buf);

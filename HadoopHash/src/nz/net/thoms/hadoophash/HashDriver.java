@@ -26,10 +26,19 @@ public class HashDriver {
 	public static void main(String[] args) throws URISyntaxException {
 		String hash =  args[0];
 		int max_length = Integer.parseInt(args[1]);
-
-		for (int i=1; i<=max_length; i++) {
+		boolean bench = false;
+		if (args.length == 3) {
+			bench = true;
+		}
+		int start;
+		if (!bench) {
+			start = 1;
+		} else {
+			start = max_length;
+		}
+		for (int i= start; i<=max_length; i++) {
 			System.out.println("Running for length " + i);
-			String output = run(hash, i);
+			String output = run(hash, i, bench);
 			if (output != null) {
 				System.out.println(output);
 				break;
@@ -38,7 +47,7 @@ public class HashDriver {
 
 	}
 
-	private static String run(String hash, int length) throws URISyntaxException {
+	private static String run(String hash, int length, boolean bench) throws URISyntaxException {
 		if (length < 4) {
 			// As an optimization, just run it locally. (it takes about 20 seconds in overhead for the hadoop jobs).
 			HashExecutor executor = new SimpleHashExecutor();
@@ -70,7 +79,10 @@ public class HashDriver {
 		FileOutputFormat.setOutputPath(conf, outputPath);
 		conf.set("hash",  hash);
 		conf.setInt("password_length", length);
-		conf.setInt("tasks", 300);
+		conf.setInt("tasks", 12);
+		if (bench) {
+			conf.setBoolean("bench", true);
+		}
 		client.setConf(conf);
 		System.out.println("Running job on hadoop");
 		try {

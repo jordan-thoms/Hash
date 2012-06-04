@@ -51,7 +51,7 @@ public class HashMapper extends MapReduceBase implements Mapper<WritableComparab
 	@Override
 	public void map(WritableComparable key, HashValue value,
 			OutputCollector<Text, Text> output, Reporter reporter) throws IOException {
-		if (foundCounter == null || foundCounter.getValue() == 0) {
+		if (foundCounter == null || foundCounter.getValue() == 0 || job.getBoolean("bench", false)) {
 			String hash = value.getHash();
 			String prefix = value.getPrefix();
 			int length = value.getLength();

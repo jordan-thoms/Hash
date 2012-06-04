@@ -27,7 +27,7 @@
         border-bottom: 1px solid #EEE;
       }
 
-      #md5-output {
+      #md5-output, #password-combinations {
         float: right;
       }
     </style>
@@ -96,13 +96,34 @@
                   
                   $("#md5-output").text(md5hash);
                 });
+
+                $("#password-set").keyup(function() {
+                  calculate();  
+                });
+
+                $("#password-length").keyup(function() {
+                  calculate();  
+                });
+
+                function calculate()
+                {
+                  $("#password-combinations").text(Math.pow($("#password-set").val(), $("#password-length").val()));
+                }
               });
             </script>
             <h2><small>Try MD5 yourself<small></h2>
             <form class="well">
-              <input type="text" id="md5-input" class="input-large search-query" placeholder="Type something">
+              <input type="text" id="md5-input" class="input-large" placeholder="Type something">
               <span class="help-block">MD5 hash: <div id="md5-output"></div></span>
             </form>
+            <h2><small>Compute problem-complexity<small></h2>
+            <div class="well">
+              <form class="form-inline">
+                <input type="text" id="password-set" class="input-medium" placeholder="Characters (e.g. 62)"> ^
+                <input type="text" id="password-length" class="input-small" placeholder="Length (e.g. 7)">
+              </form>
+              <span class="help-block">Total combinations: <div id="password-combinations"></div></span>
+            </div>
           </div>
         </div>
       </div>

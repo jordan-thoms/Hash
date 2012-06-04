@@ -72,8 +72,12 @@
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
         <h1>MD5 Hash Cracking using MapReduce</h1>
-        <p class="header"><a href="http://en.wikipedia.org/wiki/MD5">MD5</a> is a one-way hash algorithm that underpins the security of many website's authentication (e.g. think login/logout). Websites MD5 hash passwords and store it in their databases. Cracking the password requires some form of compute intensive brute-force. However, if the task was distributed over a cluster of servers using a MapReduce then the feasibility of a brute-force increases.</p>
-        <p><a id="learn-more" class="btn btn-primary btn-large" href="#md5">Learn more &raquo;</a></p>
+        <p class="header"><a href="#md5">MD5</a> is a one-way hash algorithm that underpins the security of many website's authentication (e.g. think login/logout). Websites MD5 hash passwords and store it in their databases. Cracking the password requires some form of compute intensive brute-force. However, if the task was distributed over a cluster of servers using a <a href="#architecture">MapReduce</a> then the feasibility of a brute-force increases.</p>
+        <p>
+          <a id="learn-more" class="btn btn-primary btn-large" href="#md5">Learn more &raquo;</a>
+          <a id="download" class="btn btn-info btn-large" href="">Download</a>
+          <a id="presentations" class="btn btn-info btn-large" href="">Download Presentations</a>
+        </p>
       </div>
 
       <div id="md5">
@@ -140,7 +144,7 @@
             <h2>What is a MapReduce</h2>
             <p>MapReduce is a programming model for processing large data sets, and the name of an implementation of the model by Google. MapReduce is typically used to do distributed computing on clusters of computers. The model is inspired by the map and reduce functions commonly used in functional programming, although their purpose in the MapReduce framework is not the same as their original forms. MapReduce libraries have been written in many programming languages. A popular free implementation is Apache Hadoop.</p>
             <h2>MD5 Hash Cracking Architecture</h2>
-            <p>TODO</p>
+            <p>It contains a Map Reduce Java-based library that was used to implement the brute-force. The application had an Input Reader that generated a number of jobs. These jobs were stored in GAE’s Datastore. Then a number of mappers were spawned and processed each job (retrieved from the Datastore) in parallel. The application did not make use of reducers in the traditional sense, as there were no outputs to reduce other than whether or not the mapper found the correct password matching the hash.</p>
           </div>
           <div class="span4">
             <h2><small>In a Nutshell</small></h2>
@@ -170,9 +174,10 @@
               <p>bash create_cluster.sh X</p>
               <small>Juju will spin up servers with the ubuntu 12.04 ami on Amazon EC2 Instances. X should be replaced with the number of processing servers you want to use minus one (i.e. 15 for a 16 server cluster)</small>
             </blockquote>
-            Once the previous command has completed (can take 10 minutes):
+            Once the previous command has completed:
             <blockquote>
-               <p> juju status </p>
+               <p> juju status</p>
+               <small>Can take up to 10 minutes</small>
             </blockquote>
             The output should be similar to that on the right. Record the public DNS name of the hadoop-master/0 service.
             <p>To deploy the application to the server:</p>
@@ -234,6 +239,22 @@ services:
         machine: 2
         public-address: null
 2012-06-04 20:17:42,268 INFO 'status' command finished successfully</pre>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div id="benchmark">
+        <div class="page-header">
+          <h1>Performance Benchmark <small>results</small></h1>
+        </div>
+        <div class="row"> 
+          <div class="span8">
+
+          </div>
+          <div class="span4">
+
           </div>
         </div>
       </div>

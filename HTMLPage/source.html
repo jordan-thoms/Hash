@@ -7,9 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link href="nvd3/src/d3.css" rel="stylesheet" type="text/css">
 
     <!-- Le styles -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <script src="http://d3js.org/d3.v2.js"></script>
     <script src="assets/js/jquery-1.7.2.min.js"></script>
     <style type="text/css">
       body {
@@ -249,14 +251,9 @@ services:
         <div class="page-header">
           <h1>Performance Benchmark <small>results</small></h1>
         </div>
-        <div class="row"> 
-          <div class="span8">
-
-          </div>
-          <div class="span4">
-
-          </div>
-        </div>
+          <div id="test1" style="width: 100%;left:0;position:absolute">
+    <svg></svg>
+  </div>
       </div>
 
       <hr>
@@ -287,5 +284,121 @@ services:
     <script type="text/javascript">
       $('#learn-more').scrollspy()
     </script>
+
+    <script src="http://d3js.org/d3.v2.js"></script>
+<script src="nvd3/nv.d3.js"></script>
+<script src="nvd3/src/tooltip.js"></script>
+<script src="nvd3/src/models/legend.js"></script>
+<script src="nvd3/src/models/axis.js"></script>
+<script src="nvd3/src/models/scatter.js"></script>
+<script src="nvd3/src/models/line.js"></script>
+<script src="nvd3/src/models/lineWithFocus.js"></script>
+<script src="stream_layers.js"></script>
+<script>
+
+  var test_data = stream_layers(3,128,.1).map(function(data, i) {
+    return { 
+      key: 'Stream' + i,
+      values: data
+    };
+  });
+
+nv.addGraph({
+  generate: function() {
+      var width = nv.utils.windowSize().width - 40,
+          height = nv.utils.windowSize().height - 40;
+
+      var chart = nv.models.lineWithFocus()
+                .width(width)
+                .height(height)
+                .yTickFormat(d3.format('.2r'))
+                .xTickFormat(d3.format('.2r'))
+
+
+    var svg = d3.select('#test1 svg')
+      .attr('width', width)
+      .attr('height', height)
+      .datum(test_data);
+
+    svg.transition().duration(500).call(chart);
+
+    return chart;
+  },
+  callback: function(graph) {
+
+    graph.dispatch.on('tooltipShow', function(e) {
+        var offsetElement = document.getElementById("test1"),
+                left = e.pos[0] + offsetElement.offsetLeft,
+                top = e.pos[1] + offsetElement.offsetTop,
+                formatter = d3.format('.2r');
+
+      var content = '<h3>' + e.series.key + '</h3>' +
+                    '<p>' +
+                    formatter(graph.y()(e.point)) + ', ' + formatter(graph.x()(e.point)) +
+                    '</p>';
+
+      nv.tooltip.show([left, top], content);
+    });
+
+    graph.dispatch.on('tooltipHide', function(e) {
+      nv.tooltip.cleanup();
+    });
+
+
+
+    window.onresize = function() {
+    var width = nv.utils.windowSize().width - 40,
+        height = nv.utils.windowSize().height - 40,
+        margin = graph.margin();
+
+
+      if (width < margin.left + margin.right + 20)
+        width = margin.left + margin.right + 20;
+
+      if (height < margin.top + margin.bottom + 20)
+        height = margin.top + margin.bottom + 20;
+
+
+      graph
+         .width(width)
+         .height(height);
+
+      d3.select('#test1 svg')
+        .attr('width', width)
+        .attr('height', height)
+        .call(graph);
+
+      };
+  }
+});
+
+
+
+function sinAndCos() {
+  var sin = [],
+      cos = [];
+
+  for (var i = 0; i < 100; i++) {
+    sin.push({x: i, y: Math.sin(i/10)});
+    cos.push({x: i, y: .5 * Math.cos(i/10)});
+  }
+
+  return [
+    {
+      values: sin,
+      key: "Sine Wave",
+      color: "#ff7f0e"
+    },
+    {
+      values: cos,
+      key: "Cosine Wave",
+      color: "#2ca02c"
+    }
+  ];
+}
+
+
+</script>
+
   </body>
 </html>

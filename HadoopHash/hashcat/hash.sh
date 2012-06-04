@@ -5,7 +5,8 @@ arch=`uname -m`
 ID=$RANDOM
 MYDIR="$(dirname "$(readlink -f "$0")")"
 cd $MYDIR
-mpargs="-1 ?l?d?u $2 -o hashes$ID"
+#?s
+mpargs="-1 '?l?d?u!~{|}#$%&()*+]/:;<' $2 -o hashes$ID"
 hcargs="-n 1 hash$ID.hash hashes$ID -o results$ID"
 touch results$ID
 echo $hash > hash$ID.hash

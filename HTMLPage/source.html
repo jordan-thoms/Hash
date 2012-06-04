@@ -157,21 +157,84 @@
         <div class="row"> 
           <div class="span8">
             <h2>Servers</h2>
-            <p>You need to set up a cluster of servers. This brief tutorial will not teach you how to set it up, but you should at least have <a href="http://www.cyberciti.biz/faq/ssh-password-less-login-with-dsa-publickey-authentication/">password-less</a> SSH set up on your cluster of servers. It is best to set up <a href="https://juju.ubuntu.com">Juju</a>.</p>
+            <p>You need to set up a cluster of servers. <!-- This brief tutorial will not teach you how to set it up, but you should at least have <a href="http://www.cyberciti.biz/faq/ssh-password-less-login-with-dsa-publickey-authentication/">password-less</a> SSH set up on your cluster of servers. -->  It is best to set up <a href="https://juju.ubuntu.com">Juju</a>. Before completing these steps, you will need to have a Amazon AWS account setup and configured in Juju.</p>
             <h2>Running it</h2>
             <p>To spin up server cluster using Juju</p>
             <blockquote>
-              <p>./HadoopHash/create_cluster.sh</p>
-              <small>Juju will spin up servers with specific AMI on Amazon EC2 Instances.</small>
+             <p> cd ant<br />
+              ant<br />
+              cd published</p>
             </blockquote>
+            <blockquote>
+              <p>bash create_cluster.sh X</p>
+              <small>Juju will spin up servers with the ubuntu 12.04 ami on Amazon EC2 Instances. X should be replaced with the number of processing servers you want to use minus one (i.e. 15 for a 16 server cluster)</small>
+            </blockquote>
+            Once the previous command has completed (can take 10 minutes):
+            <blockquote>
+               <p> juju status </p>
+            </blockquote>
+            The output should be similar to that on the right. Record the public DNS name of the hadoop-master/0 service.
             <p>To deploy the application to the server:</p>
             <blockquote>
-              <p>./HadoopHash/deploy_to_server.sh IP_ADDRESS</p>
-              <small>Replace IP_ADDRESS with an actual IP address or Domain name. E.g. (192.168.1.1)</small>
+              <p>./HadoopHash/deploy_to_server.sh ubuntu@DNS_NAME</p>
+              <small>Replace DNS_NAME with the actual DNS address from the previous step.</small>
+            </blockquote>
+            Now, to run a job:
+            <blockquote>
+              <p>juju ssh hadoopmaster/0<br />
+                hadoop jar classes-1.0.0.jar nz.net.thoms.hadoophash.HashDriver THE_HASH THE_MAX_LENGTH_TO_CHECK
+              </p>
             </blockquote>
           </div>
           <div class="span4">
             <h2><small>Screenshots</small></h2>
+            <blockquote><pre>
+              jords@ubuntu ~/Hash/HadoopHash/ant/published (master) $ juju status
+2012-06-04 20:17:21,161 INFO Connecting to environment...
+2012-06-04 20:17:27,187 INFO Connected to environment.
+machines:
+  0:
+    agent-state: running
+    dns-name: ec2-23-22-174-206.compute-1.amazonaws.com
+    instance-id: i-226d955b
+    instance-state: running
+  1:
+    agent-state: not-started
+    dns-name: ec2-23-22-5-13.compute-1.amazonaws.com
+    instance-id: i-d0629aa9
+    instance-state: running
+  2:
+    agent-state: not-started
+    dns-name: ec2-50-16-3-95.compute-1.amazonaws.com
+    instance-id: i-7c639b05
+    instance-state: running
+services:
+  hadoop-master:
+    charm: local:precise/hadoop-15
+    relations:
+      jobtracker:
+      - hadoop-slavecluster
+      namenode:
+      - hadoop-slavecluster
+    units:
+      hadoop-master/0:
+        agent-state: pending
+        machine: 1
+        public-address: null
+  hadoop-slavecluster:
+    charm: local:precise/hadoop-15
+    relations:
+      datanode:
+      - hadoop-master
+      tasktracker:
+      - hadoop-master
+    units:
+      hadoop-slavecluster/0:
+        agent-state: pending
+        machine: 2
+        public-address: null
+2012-06-04 20:17:42,268 INFO 'status' command finished successfully</pre>
+</blockquote>
           </div>
         </div>
       </div>

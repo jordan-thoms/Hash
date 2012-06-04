@@ -87,11 +87,15 @@
         <div class="row"> 
           <div class="span8">
             <h2>What is MD5?</h2>
-            <p>The basic concept of MD5 hashing is not new, a one-way hashing algorithm takes an input message of arbitrary length and hashes it to output a uniquely identifying 128-bit digest. This means that no other (even slightly altered) input should generate the same hash digest. When there are two or more different inputs that hash to the same digest, they are known as collisions. Though, by pigeonhole principle, two input messages could theoretically hash to one digest, it’s practically infeasible to do so. In which case, a 'good' one-way hashing algorithm should be one that avoids collisions as much as possible. Although MD5 has shown to be exploitable by using collisions, it is still widely used.</p>
+            <p>The basic concept of MD5 hashing is not new, a <b>one-way hashing algorithm</b> takes an input message of arbitrary length and hashes it to output a <b>uniquely identifying 128-bit digest</b>. This means that no other (even slightly altered) input should generate the same hash digest.</p>
             <h2>Where is it used?</h2>
-            <p>The MD5 hash algorithm underpins the security of many websites because of its cryptographic features and performance. It enables websites to leverage it to perform authentication. This is achieved by saving the MD5 hash of the original password in the site’s database. To authenticate, the hash of the user-entered password is computed and compared against the original hash. If the hashes are the same, then the user has entered in the original password and can be authenticated.</p>
+            <p>MD5 enables websites to leverage it to perform <b>authentication</b>. This is achieved by saving the MD5 hash of the original password in the site’s database. To authenticate, the hash of the user-entered password is computed and compared against the original hash. If the hashes are the same, then the user has entered in the original password and can be authenticated.</p>
+            <blockquote>
+            <p>if db->original_md5_hash() == md5(just_entered_password)</p>
+            <small>If TRUE, allow the user to authenticate</small>
+            </blockquote>
             <h2>Why is it being used?</h2>
-            <p>As websites use MD5 in its databases, hackers tend to want to reverse the hashes in order to gain access to additional privileges. Despite hackers, website developers typically argue that because the computational cost of reversing the password (in polynomial time) is so high, it would be infeasible to ‘crack’ a MD5 hash to obtain the original password. There are up to 57 billion (62^6) combinations for a six-character alphanumeric password, or 3.5 trillion for seven character passwords. Assuming a cracking rate of 1 million hashes per second, for six-characters, it would take up to 16 hours to go through all possible combinations. For eight-characters, it would take 7 years. This is because the problem complexity increases by 62 times, as the password increases by one character.</p>
+            <p>Hackers want to reverse the hashes to gain access to additional privileges. However, website developers typically argue that because the <b>computational cost of reversing the password (in polynomial time) is high</b>, it would be infeasible to ‘crack’ a MD5 hash to obtain the original password.</p>
           </div>
           <div class="span4">
             <script type="text/javascript">

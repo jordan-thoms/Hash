@@ -10,10 +10,25 @@
 
     <!-- Le styles -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <script src="assets/js/jquery-1.7.2.min.js"></script>
     <style type="text/css">
       body {
         padding-top: 60px;
         padding-bottom: 40px;
+      }
+
+      .hero-unit h1 {
+        margin-bottom: 10px;
+      }
+
+      .page-header {
+        padding-bottom: 17px;
+        margin: 18px 0;
+        border-bottom: 1px solid #EEE;
+      }
+
+      #md5-output {
+        float: right;
       }
     </style>
     <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -31,7 +46,7 @@
     <link rel="apple-touch-icon-precomposed" href="assets/ico/apple-touch-icon-57-precomposed.png">
   </head>
 
-  <body>
+  <body data-spy="scroll">
 
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
@@ -41,7 +56,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">MD5 Hasher</a>
+          <a class="brand" href="#">MD5 Hash Cracking</a>
+          <ul class="nav">
+            <li class=""><a href="#md5">MD5</a></li>
+            <li class=""><a href="#architecture">Architecture</a></li>
+            <li class=""><a href="#instructions">Instructions</a></li>
+          </ul>
         </div>
       </div>
     </div>
@@ -50,34 +70,95 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
-        <h1>MD5 Hashing using MapReduce</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+        <h1>MD5 Hash Cracking using MapReduce</h1>
+        <p class="header"><a href="http://en.wikipedia.org/wiki/MD5">MD5</a> is a one-way hash algorithm that underpins the security of many website's authentication (e.g. think login/logout). Websites MD5 hash passwords and store it in their databases. Cracking the password requires some form of compute intensive brute-force. However, if the task was distributed over a cluster of servers using a MapReduce then the feasibility of a brute-force increases.</p>
+        <p><a id="learn-more" class="btn btn-primary btn-large" href="#md5">Learn more &raquo;</a></p>
       </div>
 
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="span4">
-          <h2>Heading</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+      <div id="md5">
+        <div class="page-header">
+          <h1>MD5 <small>Hash Algorithm in detail</small></h1>
         </div>
-        <div class="span4">
-          <h2>Heading</h2>
-           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
-       </div>
-        <div class="span4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-          <p><a class="btn" href="#">View details &raquo;</a></p>
+        <div class="row"> 
+          <div class="span8">
+            <h2>What is MD5?</h2>
+            <p>The basic concept of MD5 hashing is not new, a one-way hashing algorithm takes an input message of arbitrary length and hashes it to output a uniquely identifying 128-bit digest. This means that no other (even slightly altered) input should generate the same hash digest. When there are two or more different inputs that hash to the same digest, they are known as collisions. Though, by pigeonhole principle, two input messages could theoretically hash to one digest, it’s practically infeasible to do so. In which case, a 'good' one-way hashing algorithm should be one that avoids collisions as much as possible. Although MD5 has shown to be exploitable by using collisions by Wang and Yu [1], it’s still widely used.</p>
+            <h2>Where is it used?</h2>
+            <p>The MD5 hash algorithm underpins the security of many websites because of its cryptographic features and performance. It enables websites to leverage it to perform authentication. This is achieved by saving the MD5 hash of the original password in the site’s database. To authenticate, the hash of the user-entered password is computed and compared against the original hash. If the hashes are the same, then the user has entered in the original password and can be authenticated.</p>
+            <h2>Why is it being used?</h2>
+            <p>As websites use MD5 in its databases, hackers tend to want to reverse the hashes in order to gain access to additional privileges. Despite hackers, website developers typically argue that because the computational cost of reversing the password (in polynomial time) is so high, it would be infeasible to ‘crack’ a MD5 hash to obtain the original password. There are up to 57 billion (62^6) combinations for a six-character alphanumeric password, or 3.5 trillion for seven character passwords. Assuming a cracking rate of 1 million hashes per second, for six-characters, it would take up to 16 hours to go through all possible combinations. For eight-characters, it would take 7 years. This is because the problem complexity increases by 62 times, as the password increases by one character.</p>
+          </div>
+          <div class="span4">
+            <script type="text/javascript">
+              $(document).ready(function() {
+                $("#md5-input").keyup(function() {
+                  var md5hash = calcMD5($("#md5-input").val());
+                  
+                  $("#md5-output").text(md5hash);
+                });
+              });
+            </script>
+            <h2><small>Try MD5 yourself<small></h2>
+            <form class="well">
+              <input type="text" id="md5-input" class="input-large search-query" placeholder="Type something">
+              <span class="help-block">MD5 hash: <div id="md5-output"></div></span>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div id="architecture">
+        <div class="page-header">
+          <h1>MapReduce Architecture <small>in a Nutshell</small></h1>
+        </div>
+        <div class="row"> 
+          <div class="span8">
+            <h2>What is a MapReduce</h2>
+            <p>MapReduce is a programming model for processing large data sets, and the name of an implementation of the model by Google. MapReduce is typically used to do distributed computing on clusters of computers. The model is inspired by the map and reduce functions commonly used in functional programming, although their purpose in the MapReduce framework is not the same as their original forms. MapReduce libraries have been written in many programming languages. A popular free implementation is Apache Hadoop.</p>
+            <h2>MD5 Hash Cracking Architecture</h2>
+            <p>TODO</p>
+          </div>
+          <div class="span4">
+            <h2><small>In a Nutshell</small></h2>
+            <img src="assets/img/map-reduce.png"/>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div id="instructions">
+        <div class="page-header">
+          <h1>Instructions <small>to execute it</small></h1>
+        </div>
+        <div class="row"> 
+          <div class="span8">
+            <h2>Servers</h2>
+            <p>You need to set up a cluster of servers. This brief tutorial will not teach you how to set it up, but you should at least have <a href="http://www.cyberciti.biz/faq/ssh-password-less-login-with-dsa-publickey-authentication/">password-less</a> SSH set up on your cluster of servers. It is best to set up <a href="https://juju.ubuntu.com">Juju</a>.</p>
+            <h2>Running it</h2>
+            <p>To spin up server cluster using Juju</p>
+            <blockquote>
+              <p>./HadoopHash/create_cluster.sh</p>
+              <small>Juju will spin up servers with specific AMI on Amazon EC2 Instances.</small>
+            </blockquote>
+            <p>To deploy the application to the server:</p>
+            <blockquote>
+              <p>./HadoopHash/deploy_to_server.sh IP_ADDRESS</p>
+              <small>Replace IP_ADDRESS with an actual IP address or Domain name. E.g. (192.168.1.1)</small>
+            </blockquote>
+          </div>
+          <div class="span4">
+            <h2><small>Screenshots</small></h2>
+          </div>
         </div>
       </div>
 
       <hr>
 
       <footer>
-        <p>&copy; Company 2012</p>
+        <p>&copy; Hengjie Wang and Jordan Thoms 2012</p>
       </footer>
 
     </div> <!-- /container -->
@@ -85,7 +166,6 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="assets/js/jquery.js"></script>
     <script src="assets/js/bootstrap-transition.js"></script>
     <script src="assets/js/bootstrap-alert.js"></script>
     <script src="assets/js/bootstrap-modal.js"></script>
@@ -98,6 +178,9 @@
     <script src="assets/js/bootstrap-collapse.js"></script>
     <script src="assets/js/bootstrap-carousel.js"></script>
     <script src="assets/js/bootstrap-typeahead.js"></script>
-
+    <script src="assets/js/md5-hash.js"></script>
+    <script type="text/javascript">
+      $('#learn-more').scrollspy()
+    </script>
   </body>
 </html>
